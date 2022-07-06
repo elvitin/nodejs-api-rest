@@ -1,18 +1,21 @@
-const express = require('express');
+const customExpress = require('./config/customExpress');
+const conexao = require('./infra/connection');
+const tables = require('./infra/init_tables');
 
-const app = express();
+conexao.connect(erro => {
+  if (erro)
+    console.log('Erro na conexão: ', erro);
+  else {
+    console.log('Conexão realizada!');
 
-app.listen(3000, () => {
+    tables.init(conexao);
 
-  console.log('Servidor iniciou!');
+    const app = customExpress();
+    
+    app.listen(3000, () => {
+      console.log("Servidor iniciou!");
+    });
+  }
 });
 
-
-app.get('/atendimentos', (request, response) => {
-  response.send('Server is running! (Atendimentos)');
-});
-
-app.get('/agendamentos', (request, response) => {
-  response.send('Server is running! (Agendamentos)');
-});
 
