@@ -1,19 +1,19 @@
 const customExpress = require('./config/customExpress');
-const conexao = require('./infra/connection');
-const tables = require('./infra/init_tables');
+const connection = require('./infra/database/connection');
+const tables = require('./infra/database/init_tables');
 
-conexao.connect(erro => {
+connection.connect(erro => {
   if (erro)
-    console.log('Erro na conexão: ', erro);
+    console.log('Database connection fail: ', erro);
   else {
-    console.log('Conexão realizada!');
+    console.log('Database connection successful...');
 
-    tables.init(conexao);
+    tables.init(connection);
 
     const app = customExpress();
     
     app.listen(3000, () => {
-      console.log("Servidor iniciou!");
+      console.log("Server started...");
     });
   }
 });
